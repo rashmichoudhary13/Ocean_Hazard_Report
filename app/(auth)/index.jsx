@@ -1,11 +1,41 @@
-import { Link } from 'expo-router'
-import { Text, View } from 'react-native'
+import { Link } from "expo-router";
+import { ImageBackground, Text, TouchableOpacity, View } from "react-native";
 
 export default function Auth() {
   return (
-    <View>
-      <Text>Auth (login and register) </Text>
-      <Link href={"/login"}> Login </Link>
-    </View>
-  )
+    <ImageBackground
+      source={require("../../assets/images/login_bg.jpg")} // 👈 update your image path
+      className="flex-1 justify-between"
+      resizeMode="cover"
+    >
+      <View className="flex-1 bg-black/40 justify-between p-5">
+        {/* Title */}
+
+        <Text></Text>
+        {/* Buttons at bottom */}
+        <View className="mb-10">
+          <Link href="/login" asChild>
+            <TouchableOpacity className="bg-purple-600 py-4 rounded-2xl mb-7">
+              <Text className="text-white text-center text-lg font-semibold">
+                Login
+              </Text>
+            </TouchableOpacity>
+          </Link>
+
+          <Link href="/register" asChild>
+            <TouchableOpacity className="bg-white  py-4 rounded-2xl">
+              <Text className="text-black text-center text-lg font-semibold">
+                Register
+              </Text>
+            </TouchableOpacity>
+          </Link>
+
+          <View className="mt-10">
+            <Text className="text-2xl font-bold text-center text-white "> Ocean Hazard </Text>
+          </View>
+
+        </View>
+      </View>
+    </ImageBackground>
+  );
 }
