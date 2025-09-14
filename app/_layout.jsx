@@ -6,7 +6,7 @@ import './globals.css';
 SplashScreen.preventAutoHideAsync();
 
 const RootLayout = () => {
-  const [isLogin, setIsLogin ] = useState(false);
+  const [isLogin, setIsLogin ] = useState(true);
   useEffect(() => {
     setTimeout(() => {
       SplashScreen.hideAsync();
