@@ -9,10 +9,10 @@ import Animated, {
 
 // Define the colors used in the component
 const colors = {
-  primary: "#1da2d8",
+  primary: "#005f73",
   grey: "#737373",
   white: "#FFFFFF",
-  background: "white",
+  background: "#F0FFFF",
 };
 
 // Main TabBar component
