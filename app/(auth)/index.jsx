@@ -12,20 +12,21 @@ export default function Auth() {
         {/* Title */}
 
         <Text></Text>
+        <Text className="text-white text-center text-4xl font-semibold"> Choose your role </Text>
         {/* Buttons at bottom */}
         <View className="mb-10">
           <Link href="/login" asChild>
             <TouchableOpacity className="bg-purple-600 py-4 rounded-2xl mb-7">
               <Text className="text-white text-center text-lg font-semibold">
-                Login
+                Citizen
               </Text>
             </TouchableOpacity>
           </Link>
 
-          <Link href="/register" asChild>
+          <Link href="/login" asChild>
             <TouchableOpacity className="bg-white  py-4 rounded-2xl">
               <Text className="text-black text-center text-lg font-semibold">
-                Register
+                Authority
               </Text>
             </TouchableOpacity>
           </Link>

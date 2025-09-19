@@ -1,27 +1,31 @@
 import { Redirect, Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import { useEffect, useState } from "react";
+import { AuthProvider, useAuth } from "../context/AuthContext";
 import './globals.css';
 
 SplashScreen.preventAutoHideAsync();
 
-const RootLayout = () => {
-  const [isLogin, setIsLogin ] = useState(true);
-  useEffect(() => {
-    setTimeout(() => {
-      SplashScreen.hideAsync();
-    },2000)
-  },[]);
+const RootLayoutNav = () => {
+  const { user, loading } = useAuth();
 
-  return (
-    <>
-     <Stack screenOptions={{ headerShown: false }}/>
-     { isLogin ? ( <Redirect href={"/(main)"}/> )
-     : ( <Redirect href={"/(auth)"}/> )}
-    </>
+  if (loading) {
+    return null;
+  }
 
-  );
+  SplashScreen.hideAsync();
+
+  if (!user) {
+    return <Redirect href="/(auth)" />; 
+  }
+
+  return <Redirect href="/(main)" />;
 };
 
-export default RootLayout;
-
+export default function RootLayout() {
+  return (
+    <AuthProvider>
+      <Stack screenOptions={{ headerShown: false }} />
+      <RootLayoutNav />
+    </AuthProvider>
+  );
+}

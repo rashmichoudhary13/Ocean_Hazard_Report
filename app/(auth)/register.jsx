@@ -1,99 +1,123 @@
-import { AntDesign, FontAwesome } from "@expo/vector-icons";
 import { router } from "expo-router";
+import { updateProfile } from "firebase/auth";
 import { useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Alert, Text, View } from "react-native";
 import { Button, TextInput } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useAuth } from "../../context/AuthContext";
 
 const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  
+  // Get the register function from our context
+  const { register } = useAuth();
 
-  const handleSignIn = () => {
-    console.log(email + " , " + password);
-  }
+  const handleSignUp = async () => {
+    if (!name || !email || !password) {
+      setError("Please fill in all fields.");
+      return;
+    }
+    setError("");
+    setLoading(true);
+
+    try {
+      const userCredential = await register(email, password);
+      const user = userCredential.user;
+      await updateProfile(user, {
+        displayName: name,
+      });
+      
+      const token = await user.getIdToken();
+      const API_URL = 'http://192.168.0.101:5000';
+      const response = await fetch(`${API_URL}/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name: name }),
+      });
+      if (!response.ok) {
+        throw new Error('Failed to create user profile on our server.');
+      }
+
+      Alert.alert('Success!', 'Your account has been created.');
+    } catch (err) {
+      if (err.code === 'auth/email-already-in-use') {
+        setError('That email address is already registered.');
+      } else if (err.code === 'auth/weak-password') {
+        setError('Password should be at least 6 characters.');
+      } else {
+        setError('An error occurred. Please try again.');
+        console.error(err);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-white justify-center px-6">
-      {/* Title */}
-      <Text className="text-center text-3xl font-black text-purple-600 mb-4">
+      <Text className="text-center text-3xl font-black text-cyan-500 mb-4">
         Create Account
       </Text>
-
-      {/* Subtitle */}
-      <Text className="text-center font-bold text-2xl  text-gray-700 mb-8 mx-auto">
-       Create an account to report and track hazards.
+      <Text className="text-center font-bold text-2xl text-gray-700 mb-8 mx-auto">
+        Create an account to report and track hazards.
       </Text>
-
-      {/* Name Input */}
-       <TextInput
+      <TextInput
         mode="outlined"
         label="Name"
         value={name}
         onChangeText={setName}
-        outlineColor="#9333EA"
-        activeOutlineColor="#9333EA"
+        outlineColor="#06b6d4"
+        activeOutlineColor="#06b6d4"
       />
-
-      {/* Email Input */}
       <TextInput
         mode="outlined"
         label="Email"
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
-        outlineColor="#9333EA"
-        activeOutlineColor="#9333EA"
+        autoCapitalize="none"
+        outlineColor="#06b6d4"
+        activeOutlineColor="#06b6d4"
         style={{ marginTop: 16 }}
       />
-
-      {/* Password Input */}
       <TextInput
         mode="outlined"
         label="Password"
         value={password}
         onChangeText={setPassword}
         secureTextEntry
-        outlineColor="#9333EA"
-        activeOutlineColor="#9333EA"
-        style={{ marginTop: 16, marginBottom: 20}}
+        outlineColor="#06b6d4"
+        activeOutlineColor="#06b6d4"
+        style={{ marginTop: 16, marginBottom: 8 }}
       />
-
-      {/* Sign In Button */}
+      {error ? <Text className="text-red-500 text-center mb-4">{error}</Text> : null}
       <Button
         mode="contained"
-        buttonColor="#9333EA"
-        onPress={handleSignIn}
+        buttonColor="#06b6d4"
+        onPress={handleSignUp}
+        loading={loading}
+        disabled={loading}
         style={{ paddingVertical: 3 }}
         labelStyle={{ fontSize: 15, fontWeight: "bold" }}
       >
         Sign up
       </Button>
-
-      {/* Create new account */}
       <View className="mt-5">
         <Button
           mode="text"
+          textColor="#06b6d4"
           labelStyle={{ fontSize: 18, fontWeight: "bold" }}
           onPress={() => router.push("/login")}
         >
           Already have an account
         </Button>
-      </View>
-
-      {/* Social Login */}
-      <Text className="text-center text-lg mb-4 mt-20 text-purple-600 font-bold">
-        Or continue with
-      </Text>
-
-      <View className="flex-row justify-center gap-5">
-        <TouchableOpacity className="p-3 border rounded-lg  w-16">
-          <AntDesign name="google" size={24} color="black" className="text-center" />
-        </TouchableOpacity>
-        <TouchableOpacity className="p-3 border rounded-lg w-16">
-          <FontAwesome name="facebook" size={24} color="black" className="text-center"/>
-        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );

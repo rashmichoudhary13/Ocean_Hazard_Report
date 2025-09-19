@@ -16,6 +16,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "package": "com.oceanhazard.report",
       "edgeToEdgeEnabled": true
     },
     "web": {
