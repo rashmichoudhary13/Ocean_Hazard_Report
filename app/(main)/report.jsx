@@ -13,6 +13,7 @@ import {
 import DropDownPicker from "react-native-dropdown-picker";
 
 // utils + service
+import { useAuth } from "../../context/AuthContext";
 import { submitReport } from "../../context/reportService";
 import { getCurrentLocation, pickImageWithCamera } from "../../context/reportUtils";
 
@@ -24,7 +25,7 @@ const hazardTypeNames = [
   "Illegal Fishing",
   "Chemical Spill",
   "Marine Debris",
-  "Tsunami Risk",
+  "tsunami",
   "Coastal Erosion",
 ];
 const hazardDropdownItems = hazardTypeNames.map((name) => ({
@@ -33,6 +34,7 @@ const hazardDropdownItems = hazardTypeNames.map((name) => ({
 }));
 
 export default function Report() {
+  const { user } = useAuth();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [selectedHazard, setSelectedHazard] = useState(null);
   const [open, setOpen] = useState(false);
@@ -44,34 +46,58 @@ export default function Report() {
 
   // --- Submit Report ---
   const handleSubmit = async () => {
-    if (!selectedHazard) {
-      alert("Please select a hazard type.");
+    if (!selectedHazard || !description.trim()) {
+      Alert.alert("Validation Error", "Please select a hazard type and provide a description.");
       return;
     }
-    if (!description.trim()) {
-      alert("Please provide a description.");
+    if (!location) {
+      Alert.alert("Validation Error", "Please provide a location for the report.");
       return;
     }
 
-    const reportData = {
-      hazardType: selectedHazard,
-      description,
-      location: location
-        ? { type: "Point", coordinates: [location.lng, location.lat] }
-        : null,
-      mediaUrl: photo || "",
-      date: date.toISOString().split("T")[0],
-    };
+    // 👇 1. Create a new FormData object
+    const formData = new FormData();
+
+    // 👇 2. Append all the text fields
+    formData.append('latitude', location.lat);
+    formData.append('longitude', location.lng);
+    formData.append('hazardType', selectedHazard);
+    formData.append('description', description);
+
+    // 👇 3. Append the photo file if it exists
+    if (photo) {
+      // The name of the file can be anything, but it's good practice
+      // to give it a unique name. The 'media' key MUST match the
+      // key in your backend's upload.single('media') middleware.
+      const uriParts = photo.split('.');
+      const fileType = uriParts[uriParts.length - 1];
+
+      formData.append('media', {
+        uri: photo,
+        name: `photo_${Date.now()}.${fileType}`,
+        type: `image/${fileType}`,
+      });
+    }
 
     try {
-      const data = await submitReport(reportData);
-      if (data.success) {
+       if (!user) { // 👈 3. Add a check to ensure the user is logged in
+        Alert.alert("Authentication Error", "You must be logged in to submit a report.");
+        return;
+      }
+
+      const token = await user.getIdToken();
+
+      // 👇 4. Pass the formData object to your service function
+      const responseData = await submitReport(formData, token);
+      // The backend returns the created report on success
+      if (responseData && responseData._id) {
         setIsSubmitted(true);
       } else {
-        Alert.alert("Error", "Failed to submit report.");
+        Alert.alert("Error", responseData.error || "Failed to submit report.");
       }
-    } catch {
-      Alert.alert("Error", "Could not submit report. Check connection.");
+    } catch (err) {
+      Alert.alert("Error", "Could not submit report. Check your connection.");
+      console.error("Submission Error:", err);
     }
   };
 
