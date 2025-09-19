@@ -1,5 +1,5 @@
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { useState } from "react";
 import { Alert, Text, TouchableOpacity, View } from "react-native";
 import { Button, TextInput } from "react-native-paper";
@@ -7,6 +7,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "../../context/AuthContext";
 
 const Login = () => {
+  const { role } = useLocalSearchParams();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -94,7 +95,7 @@ const Login = () => {
           mode="text"
           textColor="#06b6d4"
           labelStyle={{ fontSize: 18, fontWeight: "bold" }}
-          onPress={() => router.push("/register")}
+          onPress={() => router.push({ pathname: "/register", params: { role } })}
         >
           Create new account
         </Button>

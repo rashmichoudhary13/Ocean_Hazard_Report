@@ -1,4 +1,4 @@
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { updateProfile } from "firebase/auth";
 import { useState } from "react";
 import { Alert, Text, View } from "react-native";
@@ -7,6 +7,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "../../context/AuthContext";
 
 const Register = () => {
+  const { role } = useLocalSearchParams();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -33,13 +34,14 @@ const Register = () => {
       
       const token = await user.getIdToken();
       const API_URL = 'http://192.168.0.101:5000';
+      console.log("role is: ", role);
       const response = await fetch(`${API_URL}/auth/login`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name: name }),
+        body: JSON.stringify({ name: name, role: role }),
       });
       if (!response.ok) {
         throw new Error('Failed to create user profile on our server.');
