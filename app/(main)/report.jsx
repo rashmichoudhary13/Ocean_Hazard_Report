@@ -1,5 +1,6 @@
 import { Feather } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { Video } from "expo-av"; // 👈 1. Import Video component
 import { useState } from "react";
 import {
   Alert,
@@ -15,31 +16,40 @@ import DropDownPicker from "react-native-dropdown-picker";
 // utils + service
 import { useAuth } from "../../context/AuthContext";
 import { submitReport } from "../../context/reportService";
-import { getCurrentLocation, pickImageWithCamera } from "../../context/reportUtils";
+import {
+  // 👈 2. Import the new pickMediaFromLibrary function
+  getCurrentLocation,
+  pickImageWithCamera,
+  pickMediaFromLibrary,
+} from "../../context/reportUtils";
 
 // --- Hazards ---
+// ✅ Corrected this array to EXACTLY match the backend's enum list
 const hazardTypeNames = [
-  "Oil Spill",
-  "Plastic Pollution",
-  "Coral Damage",
-  "Illegal Fishing",
-  "Chemical Spill",
-  "Marine Debris",
-  "tsunami",
-  "Coastal Erosion",
+  "Unusual Tides",
+  "Flooding",
+  "Coastal damage", // <-- Corrected capitalization
+  "High Waves",
+  "Swell Surges",
+  "Abnormal Sea Behaviour",
+  "Tsunami",
 ];
+
+// ✅ Changed 'value' to be the name itself, not the formatted version
 const hazardDropdownItems = hazardTypeNames.map((name) => ({
   label: name,
-  value: name.toLowerCase().replace(/\s+/g, "_"),
+  value: name, // <-- This is the fix
 }));
 
 export default function Report() {
   const { user } = useAuth();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [selectedHazard, setSelectedHazard] = useState(null);
   const [open, setOpen] = useState(false);
   const [description, setDescription] = useState("");
-  const [photo, setPhoto] = useState(null);
+  // 👇 3. Replace 'photo' state with a unified 'media' state
+  const [media, setMedia] = useState(null); // Will store { uri: '...', type: 'image' | 'video' }
   const [location, setLocation] = useState(null);
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -47,56 +57,73 @@ export default function Report() {
   // --- Submit Report ---
   const handleSubmit = async () => {
     if (!selectedHazard || !description.trim()) {
-      Alert.alert("Validation Error", "Please select a hazard type and provide a description.");
+      Alert.alert(
+        "Validation Error",
+        "Please select a hazard type and provide a description."
+      );
       return;
     }
     if (!location) {
-      Alert.alert("Validation Error", "Please provide a location for the report.");
+      Alert.alert(
+        "Validation Error",
+        "Please provide a location for the report."
+      );
       return;
     }
 
-    // 👇 1. Create a new FormData object
     const formData = new FormData();
+    formData.append("latitude", location.lat);
+    formData.append("longitude", location.lng);
+    formData.append("hazardType", selectedHazard);
+    formData.append("description", description);
 
-    // 👇 2. Append all the text fields
-    formData.append('latitude', location.lat);
-    formData.append('longitude', location.lng);
-    formData.append('hazardType', selectedHazard);
-    formData.append('description', description);
-
-    // 👇 3. Append the photo file if it exists
-    if (photo) {
-      // The name of the file can be anything, but it's good practice
-      // to give it a unique name. The 'media' key MUST match the
-      // key in your backend's upload.single('media') middleware.
-      const uriParts = photo.split('.');
+    // 👇 Append media if present
+    if (media) {
+      const uriParts = media.uri.split(".");
       const fileType = uriParts[uriParts.length - 1];
-
-      formData.append('media', {
-        uri: photo,
-        name: `photo_${Date.now()}.${fileType}`,
-        type: `image/${fileType}`,
+      formData.append("media", {
+        uri: media.uri,
+        name: `${media.type}_${Date.now()}.${fileType}`,
+        type: `${media.type}/${fileType}`, // Works for both image/video
       });
     }
 
     try {
-       if (!user) { // 👈 3. Add a check to ensure the user is logged in
-        Alert.alert("Authentication Error", "You must be logged in to submit a report.");
+      if (!user) {
+        Alert.alert(
+          "Authentication Error",
+          "You must be logged in to submit a report."
+        );
         return;
       }
 
       const token = await user.getIdToken();
-
-      // 👇 4. Pass the formData object to your service function
       const responseData = await submitReport(formData, token);
-      // The backend returns the created report on success
+
       if (responseData && responseData._id) {
         setIsSubmitted(true);
+        Alert.alert(
+          "Success",
+          "Report submitted successfully! Image classified as matching."
+        ); // ✅ Green success message
       } else {
-        Alert.alert("Error", responseData.error || "Failed to submit report.");
+        // ✅ Display backend error if available
+        Alert.alert(
+          "Error",
+          responseData.error || "Failed to submit report. Please try again."
+        );
       }
     } catch (err) {
-      Alert.alert("Error", "Could not submit report. Check your connection.");
+      // ✅ Parse error from backend (400, etc.)
+      let errorMessage =
+        "Could not submit report. Check your connection or try again.";
+      if (err.response && err.response.data && err.response.data.error) {
+        errorMessage = err.response.data.error;
+      } else if (err.message) {
+        errorMessage = err.message;
+      }
+
+      Alert.alert("Submission Failed", errorMessage); // ❌ Red error message
       console.error("Submission Error:", err);
     }
   };
@@ -105,7 +132,7 @@ export default function Report() {
     setIsSubmitted(false);
     setSelectedHazard(null);
     setDescription("");
-    setPhoto(null);
+    setMedia(null); // 👈 5. Reset the new media state
     setLocation(null);
     setDate(new Date());
   };
@@ -137,17 +164,26 @@ export default function Report() {
           items={hazardDropdownItems}
           setOpen={setOpen}
           setValue={setSelectedHazard}
-          searchable={true}
+          searchable={true} // It's a good practice to keep this for long lists
           placeholder="Select a hazard type..."
+          // ✅ This is the key change to ensure the list is fully visible
           listMode="MODAL"
-          style={{ borderRadius: 12, borderColor: "#bae6fd", backgroundColor: "#f0f9ff" }}
-          dropDownContainerStyle={{ borderColor: "#bae6fd" }}
+          style={{
+            borderRadius: 12,
+            borderColor: "#bae6fd",
+            backgroundColor: "#f0f9ff",
+          }}
+          dropDownContainerStyle={{
+            borderColor: "#bae6fd",
+          }}
         />
       </View>
 
       {/* Location */}
       <View className="bg-white mt-6 p-5 rounded-2xl shadow-md border-l-4 border-cyan-500">
-        <Text className="text-lg font-semibold text-cyan-800 mb-3">Location</Text>
+        <Text className="text-lg font-semibold text-cyan-800 mb-3">
+          Location
+        </Text>
         <TouchableOpacity
           onPress={() => getCurrentLocation(setLocation)}
           className="flex-row items-center bg-cyan-50 p-4 rounded-xl"
@@ -155,7 +191,9 @@ export default function Report() {
           <Feather name="map-pin" size={22} color="#0891b2" />
           <Text className="text-base text-gray-700 ml-3">
             {location
-              ? `Lat: ${location.lat.toFixed(2)}, Lng: ${location.lng.toFixed(2)}`
+              ? `Lat: ${location.lat.toFixed(2)}, Lng: ${location.lng.toFixed(
+                  2
+                )}`
               : "Tap to use my location"}
           </Text>
         </TouchableOpacity>
@@ -163,7 +201,9 @@ export default function Report() {
 
       {/* Description */}
       <View className="bg-white mt-6 p-5 rounded-2xl shadow-md border-l-4 border-cyan-500">
-        <Text className="text-lg font-semibold text-cyan-800 mb-3">Description</Text>
+        <Text className="text-lg font-semibold text-cyan-800 mb-3">
+          Description
+        </Text>
         <TextInput
           placeholder="Describe the hazard..."
           value={description}
@@ -174,22 +214,82 @@ export default function Report() {
         />
       </View>
 
-      {/* Photo */}
+      {/* 👇 6. Redesigned Media Section */}
       <View className="bg-white mt-6 p-5 rounded-2xl shadow-md border-l-4 border-cyan-500">
-        <Text className="text-lg font-semibold text-cyan-800 mb-3">Photo</Text>
-        <TouchableOpacity
-          onPress={() => pickImageWithCamera(setPhoto)}
-          className="flex-row items-center justify-center bg-cyan-50 p-4 rounded-xl"
-        >
-          <Feather name="camera" size={22} color="#0891b2" />
-          <Text className="text-base text-gray-700 ml-2">Upload a photo</Text>
-        </TouchableOpacity>
-        {photo && (
-          <Image
-            source={{ uri: photo }}
-            className="w-full h-44 mt-4 rounded-xl border border-cyan-200"
-            resizeMode="cover"
-          />
+        <Text className="text-lg font-semibold text-cyan-800 mb-3">
+          Upload Media
+        </Text>
+
+        {/* --- Media Preview or Upload Area --- */}
+        {media ? (
+          <View className="mt-1 relative">
+            {/* Display Image Preview */}
+            {media.type === "image" && (
+              <Image
+                source={{ uri: media.uri }}
+                className="w-full h-48 rounded-xl border border-gray-200"
+                resizeMode="cover"
+              />
+            )}
+
+            {/* ✅ NEW: Display Video Selection Confirmation */}
+            {media.type === "video" && (
+              <View className="w-full h-48 rounded-xl bg-cyan-50 border-2 border-dashed border-cyan-200 flex-col items-center justify-center p-4">
+                <View className="flex-row items-center bg-white p-4 rounded-full shadow-md">
+                  <Feather name="video" size={28} color="#0891b2" />
+                  <Text className="text-base font-semibold text-cyan-900 ml-3">
+                    Video Selected
+                  </Text>
+                  <Feather
+                    name="check-circle"
+                    size={22}
+                    color="#10b981"
+                    className="ml-2"
+                  />
+                </View>
+              </View>
+            )}
+
+            {/* Remove Media Button (works for both image and video) */}
+            <TouchableOpacity
+              onPress={() => setMedia(null)}
+              className="absolute top-2 right-2 bg-black/60 p-1.5 rounded-full z-10"
+            >
+              <Feather name="x" size={18} color="white" />
+            </TouchableOpacity>
+          </View>
+        ) : (
+          /* --- Upload Dropzone --- */
+          <TouchableOpacity
+            onPress={() => {
+              Alert.alert(
+                "Add Media",
+                "Choose an option to add your media.",
+                [
+                  {
+                    text: "Take Photo",
+                    onPress: () => pickImageWithCamera(setMedia),
+                  },
+                  {
+                    text: "Choose from Library",
+                    onPress: () => pickMediaFromLibrary(setMedia),
+                  },
+                  {
+                    text: "Cancel",
+                    style: "cancel",
+                  },
+                ],
+                { cancelable: true }
+              );
+            }}
+            className="mt-2 flex-col items-center justify-center bg-cyan-50/50 p-10 rounded-2xl border-2 border-dashed border-cyan-300"
+          >
+            <Feather name="upload-cloud" size={40} color="#0891b2" />
+            <Text className="text-base text-gray-600 mt-2 font-medium">
+              Tap to add Photo or Video
+            </Text>
+            <Text className="text-sm text-gray-500 mt-1">(Photo or Video)</Text>
+          </TouchableOpacity>
         )}
       </View>
 
