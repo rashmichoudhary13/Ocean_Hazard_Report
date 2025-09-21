@@ -23,7 +23,7 @@ export default function Auth() {
             </TouchableOpacity>
           </Link>
 
-          <Link href={{ pathname: "/login", params: { role: 'authority' } }} asChild>
+          <Link href={{ pathname: "/login", params: { role: 'official' } }} asChild>
             <TouchableOpacity className="bg-white  py-4 rounded-2xl">
               <Text className="text-black text-center text-lg font-semibold">
                 Authority

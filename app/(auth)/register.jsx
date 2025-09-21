@@ -35,7 +35,7 @@ const Register = () => {
       const token = await user.getIdToken();
       const API_URL = 'http://192.168.0.102:5000';
       console.log("role is: ", role);
-      const response = await fetch(`${API_URL}/auth/login`, {
+      const response = await fetch('http://192.168.0.102:5000/auth/login', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
