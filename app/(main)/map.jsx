@@ -7,14 +7,9 @@ import { clusterReports } from "../../utils/MapHelpers";
 const CLUSTER_DISTANCE_THRESHOLD = 0.5;
 const INITIAL_LATITUDE_DELTA = 5.0;
 
-// 👇 This is our breakpoint.
-// When latitudeDelta is larger than this, we use dynamic scaling.
-// When it's smaller, we use the fixed radius.
-// ⚙️ You can tweak this value. 0.5 is good for a city/regional view.
 const ZOOM_THRESHOLD = 0.5;
 
 const MapLegend = () => (
-    // ... Legend component is unchanged
     <View style={styles.legendContainer}>
         <Text style={styles.legendTitle}>Hotspot Density</Text>
         <View style={styles.legendItem}>
@@ -117,8 +112,8 @@ export default function Map() {
             <Circle
               key={cluster.id}
               center={cluster.center}
-              radius={radiusToRender} // Use the conditionally calculated radius
-              fillColor={cluster.color + 'B3'} // Adds 70% opacity
+              radius={radiusToRender}
+              fillColor={cluster.color + 'B3'} 
               strokeColor={cluster.color}
               strokeWidth={1}
             />
