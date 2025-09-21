@@ -22,7 +22,7 @@ const ProfileScreen = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-cyan-100">
+    <SafeAreaView className="flex-1 bg-gradient-to-b from-cyan-50 to-cyan-200">
       <StatusBar barStyle="light-content" />
 
       <ProfileInfo

@@ -3,7 +3,7 @@ import { initializeApp } from "firebase/app";
 import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
 import { getReactNativePersistence, initializeAuth } from 'firebase/auth';
 
-// Your web app's Firebase configuration
+// Rohit 
 // const firebaseConfig = {
 //   apiKey: "AIzaSyCWhDfoedXM7zlz-tgcIpqddt_UmAUbUHk",
 //   authDomain: "ocean-hazard-app.firebaseapp.com",
@@ -14,6 +14,8 @@ import { getReactNativePersistence, initializeAuth } from 'firebase/auth';
 //   measurementId: "G-TY2RR42R2D"
 // };
 
+
+// Mine 
 const firebaseConfig = {
   apiKey: "AIzaSyBCYa7T6auxJam9LuB7anBHYDIINueqU6s",
   authDomain: "image-c1b84.firebaseapp.com",
