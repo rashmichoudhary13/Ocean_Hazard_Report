@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import {
-  ActivityIndicator,
-  FlatList, // Kept for the horizontal list, but main layout is ScrollView
+  ActivityIndicator, // Kept for the horizontal list, but main layout is ScrollView
   Image,
   SafeAreaView,
   ScrollView, // Changed to ScrollView for the overall page layout
