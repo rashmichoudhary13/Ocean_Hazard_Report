@@ -7,7 +7,7 @@ import { clusterReports } from "../../utils/MapHelpers";
 
 // --- Configuration ---
 const MAPTILER_API_KEY = 'PSKKY9Cyh2izeQTNhuac'; 
-const API_URL = 'http://192.168.0.101:5000/reports'; 
+const API_URL = 'http://192.168.0.100:5000/reports'; 
 
 const CLUSTER_DISTANCE_THRESHOLD = 0.8;
 const ZOOM_IN_THRESHOLD = 4.0; // Zoom level to switch from clusters to markers
@@ -98,28 +98,8 @@ export default function MapScreen() {
     const initializeLocation = async () => {
       try {
         let { status } = await Location.requestForegroundPermissionsAsync();
-
-        if (status !== "granted") {
-          alert("Permission to access location was denied");
-          setLoading(false);
-          return;
-        }
-        let location = await Location.getCurrentPositionAsync({});
-        const { latitude, longitude } = location.coords;
-        setRegion({
-          latitude,
-          longitude,
-          latitudeDelta: INITIAL_LATITUDE_DELTA,
-          longitudeDelta: INITIAL_LATITUDE_DELTA,
-        });
-        const API_URL = 'http://192.168.0.100:5000/reports';
-        const response = await fetch(API_URL);
-        if (!response.ok) throw new Error('Failed to fetch reports.');
-        const data = await response.json();
-        setAllReports(data.reports);
-
         if (status !== 'granted') throw new Error('Location permission denied');
-        if (status !== 'granted') throw new Error('Location permission denied');
+        
         // Default to India view if location is not found quickly
         const initialRegion = {
           latitude: 20.5937,

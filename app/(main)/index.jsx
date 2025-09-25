@@ -1,14 +1,18 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
-  ActivityIndicator,
+  ActivityIndicator, // Kept for the horizontal list, but main layout is ScrollView
   Image,
   SafeAreaView,
-  ScrollView,
+  ScrollView, // Changed to ScrollView for the overall page layout
   Text,
   TouchableOpacity, // Added for the "More" button
   View,
 } from "react-native";
 
+// --- Reusable UI Components ---
+
+// Card for the top statistics section
 const StatsCard = ({ title, value, icon, bgColor }) => (
   <View
     className={`w-[48%] ${bgColor} p-4 rounded-3xl shadow-lg mb-3 justify-between h-36`}
@@ -132,11 +136,7 @@ export default function Home() {
   useEffect(() => {
     const fetchReports = async () => {
       try {
-
-        const API_URL = 'http://192.168.0.100:5000/reports';
-        
-=======
-        const API_URL = "http://192.168.0.101:5000/reports";
+        const API_URL = "http://192.168.0.100:5000/reports";
 
         const response = await fetch(API_URL);
         if (!response.ok) {
@@ -191,27 +191,23 @@ export default function Home() {
       <ScrollView contentContainerStyle={{ padding: 16 }}>
         {/* Section 1: Overall Statistics */}
         <View className="flex-row flex-wrap justify-between mb-6">
-            <StatsCard title={t("totalReports")} value={totalReports} bgColor="bg-purple-200" icon="🌐" />
-            <StatsCard title={t("userReports")} value={userReports} bgColor="bg-rose-200" icon="👤" />
-            <StatsCard title={t("socialMedia")} value={socialMediaReports} bgColor="bg-cyan-200" icon="💬" />
-            <StatsCard title={t("verifiedReports")} value={verifiedReports} bgColor="bg-amber-200" icon="✅" />
           <StatsCard
-            title="Total Reports"
+            title={t("totalReports")}
             value={totalReports}
             bgColor="bg-cyan-200"
           />
           <StatsCard
-            title="User Reports"
+            title={t("userReports")}
             value={userReports}
             bgColor="bg-cyan-200"
           />
           <StatsCard
-            title="Social Media"
+            title={t("socialMedia")}
             value={socialMediaReports}
             bgColor="bg-cyan-200"
           />
           <StatsCard
-            title="Verified Reports"
+            title={t("verifiedReports")}
             value={verifiedReports}
             bgColor="bg-cyan-200"
           />
@@ -221,12 +217,12 @@ export default function Home() {
         <View className="mb-8">
           <View className="flex-row justify-between items-center mb-4">
             <Text className="text-2xl font-bold text-cyan-900">
-              Recent Hazard Reports
+              {t("recentHazardReports")}
             </Text>
             <TouchableOpacity
               onPress={() => console.log("Navigate to All Reports")}
             >
-              <Text className="text-cyan-600 font-semibold">More &gt;</Text>
+              <Text className="text-cyan-600 font-semibold">{t("more")} &gt;</Text>
             </TouchableOpacity>
           </View>
           {reports.slice(0, 3).map((item) => (
@@ -234,7 +230,7 @@ export default function Home() {
           ))}
           {reports.length === 0 && (
             <Text className="text-center text-gray-500 mt-4">
-              No recent reports found.
+              {t("noRecentReports")}
             </Text>
           )}
         </View>
@@ -242,7 +238,7 @@ export default function Home() {
         {/* Section 3: Community Leaderboard */}
         <View>
           <Text className="text-2xl font-bold text-cyan-900 mb-4">
-            Community Leaderboard
+            {t("communityLeaderboard")}
           </Text>
           {leaderboardData.map((user, index) => (
             <LeaderboardItem user={user} rank={index + 1} key={user.id} />
