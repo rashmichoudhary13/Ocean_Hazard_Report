@@ -1,17 +1,18 @@
-import { useEffect, useState } from 'react';
-import { useTranslation } from "react-i18next";
+import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Image,
   SafeAreaView,
   ScrollView,
   Text,
-  TouchableOpacity,
-  View
-} from 'react-native';
+  TouchableOpacity, // Added for the "More" button
+  View,
+} from "react-native";
 
 const StatsCard = ({ title, value, icon, bgColor }) => (
-  <View className={`w-[48%] ${bgColor} p-4 rounded-3xl shadow-lg mb-3 justify-between h-36`}>
+  <View
+    className={`w-[48%] ${bgColor} p-4 rounded-3xl shadow-lg mb-3 justify-between h-36`}
+  >
     <View>
       <Text className="text-gray-700 font-semibold text-base">{title}</Text>
       <Text className="text-gray-900 text-4xl font-bold mt-1">{value}</Text>
@@ -23,8 +24,10 @@ const StatsCard = ({ title, value, icon, bgColor }) => (
 // Card for a single report in the "Recent Reports" list
 const ReportCard = ({ item }) => {
   const formatHazardType = (type) => {
-    if (!type) return 'Unknown Hazard';
-    return type.replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
+    if (!type) return "Unknown Hazard";
+    return type
+      .replace(/_/g, " ")
+      .replace(/\b\w/g, (char) => char.toUpperCase());
   };
 
   const location = item.location?.coordinates;
@@ -32,8 +35,8 @@ const ReportCard = ({ item }) => {
   return (
     <View className="bg-white rounded-2xl shadow-lg overflow-hidden mb-4 border border-gray-200">
       {item.mediaUrl ? (
-        <Image 
-          source={{ uri: item.mediaUrl }} 
+        <Image
+          source={{ uri: item.mediaUrl }}
           className="w-full h-48"
           resizeMode="cover"
         />
@@ -51,7 +54,9 @@ const ReportCard = ({ item }) => {
         </Text>
         {location && (
           <View className="flex-row items-center mt-3 pt-3 border-t border-gray-200">
-            <Text className="text-base font-semibold text-gray-700">📍 Location:</Text>
+            <Text className="text-base font-semibold text-gray-700">
+              📍 Location:
+            </Text>
             <Text className="text-base text-gray-600 ml-2">
               Lat: {location[1].toFixed(4)}, Lon: {location[0].toFixed(4)}
             </Text>
@@ -68,43 +73,47 @@ const ReportCard = ({ item }) => {
 const getRankStyle = (rank) => {
   switch (rank) {
     case 1:
-      return 'bg-amber-100 border-amber-400'; // Gold
+      return "bg-amber-100 border-amber-400"; // Gold
     case 2:
-      return 'bg-slate-200 border-slate-400'; // Silver
+      return "bg-slate-200 border-slate-400"; // Silver
     case 3:
-      return 'bg-orange-200 border-orange-400'; // Bronze
+      return "bg-orange-200 border-orange-400"; // Bronze
     default:
-      return 'bg-white border-gray-200';
+      return "bg-white border-gray-200";
   }
 };
 
 const LeaderboardItem = ({ user, rank }) => {
-    const rankStyle = getRankStyle(rank);
-    // Placeholder for user avatar
-    const initials = user.name.split(' ').map(n => n[0]).join('');
+  const rankStyle = getRankStyle(rank);
+  // Placeholder for user avatar
+  const initials = user.name
+    .split(" ")
+    .map((n) => n[0])
+    .join("");
 
-    return (
-        <View className={`flex-row items-center p-3 rounded-2xl mb-3 shadow-md border-2 ${rankStyle}`}>
-            {/* Avatar Placeholder */}
-            <View className="w-12 h-12 rounded-full bg-cyan-100 justify-center items-center mr-4">
-                <Text className="text-cyan-700 font-bold text-lg">{initials}</Text>
-            </View>
+  return (
+    <View
+      className={`flex-row items-center p-3 rounded-2xl mb-3 shadow-md border-2 ${rankStyle}`}
+    >
+      {/* Avatar Placeholder */}
+      <View className="w-12 h-12 rounded-full bg-cyan-100 justify-center items-center mr-4">
+        <Text className="text-cyan-700 font-bold text-lg">{initials}</Text>
+      </View>
 
-            {/* User Info */}
-            <View className="flex-1">
-                <Text className="text-lg font-bold text-gray-800">{user.name}</Text>
-                <Text className="text-sm text-gray-500">{user.reports} Reports</Text>
-            </View>
+      {/* User Info */}
+      <View className="flex-1">
+        <Text className="text-lg font-bold text-gray-800">{user.name}</Text>
+        <Text className="text-sm text-gray-500">{user.reports} Reports</Text>
+      </View>
 
-            {/* Points */}
-            <View className="items-end">
-                <Text className="text-xl font-bold text-cyan-800">{user.points}</Text>
-                <Text className="text-sm text-gray-500">Points</Text>
-            </View>
-        </View>
-    );
+      {/* Points */}
+      <View className="items-end">
+        <Text className="text-xl font-bold text-cyan-800">{user.points}</Text>
+        <Text className="text-sm text-gray-500">Points</Text>
+      </View>
+    </View>
+  );
 };
-
 
 // --- The Main Home Screen Component ---
 export default function Home() {
@@ -115,22 +124,29 @@ export default function Home() {
 
   // MOCK DATA for Leaderboard (replace with API call)
   const leaderboardData = [
-      { id: '1', name: 'Priya Sharma', reports: 25, points: 1250 },
-      { id: '2', name: 'Raj Patel', reports: 21, points: 1050 },
-      { id: '3', name: 'Amit Singh', reports: 18, points: 900 },
+    { id: "1", name: "Priya Sharma", reports: 25, points: 1250 },
+    { id: "2", name: "Raj Patel", reports: 21, points: 1050 },
+    { id: "3", name: "Amit Singh", reports: 18, points: 900 },
   ];
 
   useEffect(() => {
     const fetchReports = async () => {
       try {
+<<<<<<< HEAD
         const API_URL = 'http://192.168.0.100:5000/reports';
         
+=======
+        const API_URL = "http://192.168.0.101:5000/reports";
+
+>>>>>>> 14e71d3aeca8b7ba1deae451c32b57c1c4b7ff74
         const response = await fetch(API_URL);
         if (!response.ok) {
-            throw new Error('Failed to fetch data from the server.');
+          throw new Error("Failed to fetch data from the server.");
         }
         const data = await response.json();
-        const sortedReports = data.reports.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        const sortedReports = data.reports.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
         setReports(sortedReports);
       } catch (err) {
         console.error("Fetch error:", err);
@@ -164,26 +180,50 @@ export default function Home() {
 
   // --- Derived State for Stats ---
   const totalReports = reports.length;
-  const userReports = reports.filter(r => r.source === 'user').length;
-  const socialMediaReports = reports.filter(r => r.source === 'social_media').length;
-  const verifiedReports = reports.filter(r => r.isVerified).length;
-
+  const userReports = reports.filter((r) => r.source === "user").length;
+  const socialMediaReports = reports.filter(
+    (r) => r.source === "social_media"
+  ).length;
+  const verifiedReports = reports.filter((r) => r.isVerified).length;
 
   // --- Main Render ---
   return (
     <SafeAreaView className="flex-1 bg-gray-100">
       <ScrollView contentContainerStyle={{ padding: 16 }}>
-
         {/* Section 1: Overall Statistics */}
         <View className="flex-row flex-wrap justify-between mb-6">
+<<<<<<< HEAD
             <StatsCard title={t("totalReports")} value={totalReports} bgColor="bg-purple-200" icon="🌐" />
             <StatsCard title={t("userReports")} value={userReports} bgColor="bg-rose-200" icon="👤" />
             <StatsCard title={t("socialMedia")} value={socialMediaReports} bgColor="bg-cyan-200" icon="💬" />
             <StatsCard title={t("verifiedReports")} value={verifiedReports} bgColor="bg-amber-200" icon="✅" />
+=======
+          <StatsCard
+            title="Total Reports"
+            value={totalReports}
+            bgColor="bg-cyan-200"
+          />
+          <StatsCard
+            title="User Reports"
+            value={userReports}
+            bgColor="bg-cyan-200"
+          />
+          <StatsCard
+            title="Social Media"
+            value={socialMediaReports}
+            bgColor="bg-cyan-200"
+          />
+          <StatsCard
+            title="Verified Reports"
+            value={verifiedReports}
+            bgColor="bg-cyan-200"
+          />
+>>>>>>> 14e71d3aeca8b7ba1deae451c32b57c1c4b7ff74
         </View>
 
         {/* Section 2: Recent Hazard Reports */}
         <View className="mb-8">
+<<<<<<< HEAD
             <View className="flex-row justify-between items-center mb-4">
                 <Text className="text-2xl font-bold text-cyan-900">{t("recentHazardReports")}</Text>
                 <TouchableOpacity onPress={() => console.log('Navigate to All Reports')}>
@@ -204,10 +244,38 @@ export default function Home() {
             {leaderboardData.map((user, index) => (
                 <LeaderboardItem user={user} rank={index + 1} key={user.id} />
             ))}
+=======
+          <View className="flex-row justify-between items-center mb-4">
+            <Text className="text-2xl font-bold text-cyan-900">
+              Recent Hazard Reports
+            </Text>
+            <TouchableOpacity
+              onPress={() => console.log("Navigate to All Reports")}
+            >
+              <Text className="text-cyan-600 font-semibold">More &gt;</Text>
+            </TouchableOpacity>
+          </View>
+          {reports.slice(0, 3).map((item) => (
+            <ReportCard item={item} key={item._id} />
+          ))}
+          {reports.length === 0 && (
+            <Text className="text-center text-gray-500 mt-4">
+              No recent reports found.
+            </Text>
+          )}
+>>>>>>> 14e71d3aeca8b7ba1deae451c32b57c1c4b7ff74
         </View>
 
+        {/* Section 3: Community Leaderboard */}
+        <View>
+          <Text className="text-2xl font-bold text-cyan-900 mb-4">
+            Community Leaderboard
+          </Text>
+          {leaderboardData.map((user, index) => (
+            <LeaderboardItem user={user} rank={index + 1} key={user.id} />
+          ))}
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
 }
-
