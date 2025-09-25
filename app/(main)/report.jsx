@@ -1,11 +1,10 @@
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Alert,
   Image,
-  KeyboardAvoidingView,
-  Platform,
   ScrollView,
   Text,
   TextInput,
@@ -22,34 +21,39 @@ import {
   pickMediaFromLibrary,
 } from "../../context/reportUtils";
 
-// --- Hazard & Severity Data ---
-const naturalHazards = [
-  { name: "Unusual Tides", icon: "waves-arrow-up" },
-  { name: "Flooding", icon: "home-flood" },
-  { name: "Coastal damage", icon: "image-broken-variant" },
-  { name: "High Waves", icon: "surfing" },
-  { name: "Swell Surges", icon: "pulse" },
-  { name: "Tsunami", icon: "waves" },
-];
-
-const manMadeHazards = [
-  { name: "Oil Spill", icon: "oil" },
-  { name: "Pollution/Debris", icon: "trash-can-outline" },
-  { name: "Abnormal Sea Behaviour", icon: "radar" },
-  { name: "Other Hazard", icon: "alert-circle-outline" },
-];
-
-const severityLevels = [
-  { level: "Low", description: "Minor concern", color: "bg-green-100 border-green-300", textColor: "text-green-800" },
-  { level: "Medium", description: "Moderate risk", color: "bg-yellow-100 border-yellow-400", textColor: "text-yellow-800" },
-  { level: "High", description: "Serious danger", color: "bg-red-100 border-red-400", textColor: "text-red-800" },
-];
 
 export default function Report() {
   const { user } = useAuth();
+  const { t } = useTranslation('report'); // <-- Initialize translation hook
+
+  // --- Translated Hazard & Severity Data ---
+  // Moved inside the component to access the `t` function
+  const naturalHazards = [
+    { name: t('hazards.unusualTides'), key: 'unusualTides', icon: "waves-arrow-up" },
+    { name: t('hazards.flooding'), key: 'flooding', icon: "home-flood" },
+    { name: t('hazards.coastalDamage'), key: 'coastalDamage', icon: "image-broken-variant" },
+    { name: t('hazards.highWaves'), key: 'highWaves', icon: "surfing" },
+    { name: t('hazards.swellSurges'), key: 'swellSurges', icon: "pulse" },
+    { name: t('hazards.tsunami'), key: 'tsunami', icon: "waves" },
+  ];
+
+  const manMadeHazards = [
+    { name: t('hazards.oilSpill'), key: 'oilSpill', icon: "oil" },
+    { name: t('hazards.pollutionDebris'), key: 'pollutionDebris', icon: "trash-can-outline" },
+    { name: t('hazards.abnormalSeaBehaviour'), key: 'abnormalSeaBehaviour', icon: "radar" },
+    { name: t('hazards.otherHazard'), key: 'otherHazard', icon: "alert-circle-outline" },
+  ];
+
+  const severityLevels = [
+    { level: t('severity.low'), description: t('severity.lowDesc'), key: 'Low', color: "bg-green-100 border-green-300", textColor: "text-green-800" },
+    { level: t('severity.medium'), description: t('severity.mediumDesc'), key: 'Medium', color: "bg-yellow-100 border-yellow-400", textColor: "text-yellow-800" },
+    { level: t('severity.high'), description: t('severity.highDesc'), key: 'High', color: "bg-red-100 border-red-400", textColor: "text-red-800" },
+  ];
+
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  
+
   // State for the multi-step form
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedHazard, setSelectedHazard] = useState(null);
@@ -64,7 +68,7 @@ export default function Report() {
   const handleSubmit = async () => {
     // --- Validation Checks ---
     if (!selectedCategory || !selectedHazard || !selectedSeverity || !description.trim() || !location) {
-      Alert.alert("Validation Error", "Please complete all required steps before submitting.");
+      Alert.alert(t('validationErrorTitle'), t('validationErrorMessage'));
       return;
     }
     
@@ -73,10 +77,10 @@ export default function Report() {
     formData.append("latitude", location.lat);
     formData.append("longitude", location.lng);
     formData.append("hazardCategory", selectedCategory);
-    formData.append("hazardType", selectedHazard);
-    formData.append("severityLevel", selectedSeverity);
+    formData.append("hazardType", selectedHazard); // Send original English key
+    formData.append("severityLevel", selectedSeverity); // Send original English key
     formData.append("description", description);
-    formData.append("reportDate", date.toISOString()); // Add date to form data
+    formData.append("reportDate", date.toISOString());
 
     if (media) {
       const uriParts = media.uri.split(".");
@@ -90,7 +94,7 @@ export default function Report() {
 
     try {
       if (!user) {
-        Alert.alert("Authentication Error", "You must be logged in to submit a report.");
+        Alert.alert(t('authErrorTitle'), t('authErrorMessage'));
         return;
       }
       const token = await user.getIdToken();
@@ -99,7 +103,7 @@ export default function Report() {
       if (responseData && responseData._id) {
         setIsSubmitted(true);
       } else {
-        Alert.alert("Error", responseData.error || "Failed to submit report.");
+        Alert.alert("Error", responseData.error || t('submissionFailedTitle'));
       }
     } catch (err) {
       let errorMessage = "Could not submit report. Check your connection.";
@@ -108,7 +112,7 @@ export default function Report() {
       } else if (err.message) {
         errorMessage = err.message;
       }
-      Alert.alert("Submission Failed", errorMessage);
+      Alert.alert(t('submissionFailedTitle'), errorMessage);
       console.error("Submission Error:", err);
     } finally {
       setIsSubmitting(false);
@@ -127,7 +131,6 @@ export default function Report() {
   };
 
   // --- Reusable UI Components for the Form ---
-
   const StepCard = ({ step, title, children }) => (
     <View className="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 mb-6">
       <Text className="text-xl font-bold text-slate-800 mb-4">
@@ -182,7 +185,6 @@ export default function Report() {
 
   // --- Main Form Renderer ---
   const renderForm = () => (
-   
       <ScrollView
         contentContainerStyle={{ flexGrow: 1, paddingBottom: 100 }}
         className="flex-1 bg-slate-50 p-4"
@@ -190,23 +192,23 @@ export default function Report() {
         {/* Header */}
         <View className="items-center mb-6">
           <Text className="text-3xl font-extrabold text-slate-800 text-center">
-            Report an Ocean Hazard
+            {t('headerTitle')}
           </Text>
           <Text className="text-base text-slate-500 mt-2 text-center">
-            Your observations help keep our coasts safe.
+            {t('headerSubtitle')}
           </Text>
         </View>
 
         {/* Step 1: Hazard Category */}
-        <StepCard step="1" title="Select Hazard Category">
+        <StepCard step="1" title={t('step1Title')}>
           <View className="flex-row gap-4">
             <SelectionPill
-              text="Natural Hazard"
+              text={t('naturalHazard')}
               isSelected={selectedCategory === "natural"}
               onPress={() => { setSelectedCategory("natural"); setSelectedHazard(null); }}
             />
             <SelectionPill
-              text="Man-made Hazard"
+              text={t('manMadeHazard')}
               isSelected={selectedCategory === "manmade"}
               onPress={() => { setSelectedCategory("manmade"); setSelectedHazard(null); }}
             />
@@ -215,14 +217,14 @@ export default function Report() {
 
         {/* Step 2: Hazard Type */}
         {selectedCategory && (
-          <StepCard step="2" title="What type of hazard is it?">
+          <StepCard step="2" title={t('step2Title')}>
             <View className="flex-row flex-wrap -m-1">
               {(selectedCategory === "natural" ? naturalHazards : manMadeHazards).map((h) => (
-                <View key={h.name} className="w-1/2 p-1">
+                <View key={h.key} className="w-1/2 p-1">
                   <HazardGridCard
                     hazard={h}
-                    isSelected={selectedHazard === h.name}
-                    onPress={() => setSelectedHazard(h.name)}
+                    isSelected={selectedHazard === h.key}
+                    onPress={() => setSelectedHazard(h.key)}
                   />
                 </View>
               ))}
@@ -232,14 +234,14 @@ export default function Report() {
         
         {/* Step 3: Severity Level */}
         {selectedHazard && (
-          <StepCard step="3" title="Assess the Severity Level">
+          <StepCard step="3" title={t('step3Title')}>
               <View className="flex-row gap-2">
                   {severityLevels.map((s) => (
                       <SeverityChoiceCard 
-                          key={s.level}
+                          key={s.key}
                           severity={s}
-                          isSelected={selectedSeverity === s.level}
-                          onPress={() => setSelectedSeverity(s.level)}
+                          isSelected={selectedSeverity === s.key}
+                          onPress={() => setSelectedSeverity(s.key)}
                       />
                   ))}
               </View>
@@ -248,9 +250,9 @@ export default function Report() {
 
         {/* Step 4: Provide Details */}
         {selectedSeverity && (
-          <StepCard step="4" title="Provide Details">
+          <StepCard step="4" title={t('step4Title')}>
             {/* Location */}
-            <Text className="text-lg font-semibold text-slate-700 mb-2">Location</Text>
+            <Text className="text-lg font-semibold text-slate-700 mb-2">{t('locationLabel')}</Text>
             <TouchableOpacity
               onPress={() => getCurrentLocation(setLocation)}
               className="flex-row items-center bg-slate-100 p-4 rounded-xl border border-slate-200 mb-4"
@@ -259,14 +261,14 @@ export default function Report() {
               <Text className="text-base text-slate-700 ml-3">
                 {location
                   ? `Lat: ${location.lat.toFixed(4)}, Lng: ${location.lng.toFixed(4)}`
-                  : "Tap to use my location"}
+                  : t('locationPlaceholder')}
               </Text>
             </TouchableOpacity>
 
             {/* Description */}
-            <Text className="text-lg font-semibold text-slate-700 mb-2">Description</Text>
+            <Text className="text-lg font-semibold text-slate-700 mb-2">{t('descriptionLabel')}</Text>
             <TextInput
-              placeholder="Describe what you see..."
+              placeholder={t('descriptionPlaceholder')}
               value={description}
               onChangeText={setDescription}
               multiline
@@ -276,36 +278,36 @@ export default function Report() {
             />
             
             {/* Media Upload */}
-            <Text className="text-lg font-semibold text-slate-700 mb-2">Upload Media</Text>
+            <Text className="text-lg font-semibold text-slate-700 mb-2">{t('mediaLabel')}</Text>
             {media ? (
-                <View className="relative mb-4">
-                    {media.type === "image" && <Image source={{ uri: media.uri }} className="w-full h-48 rounded-xl" />}
-                    {media.type === "video" && (
-                        <View className="w-full h-48 rounded-xl bg-slate-100 justify-center items-center">
-                            <Feather name="video" size={40} color="#475569" />
-                            <Text className="font-semibold text-slate-700 mt-2">Video Selected</Text>
-                        </View>
-                    )}
-                    <TouchableOpacity onPress={() => setMedia(null)} className="absolute top-2 right-2 bg-black/60 p-1.5 rounded-full">
-                        <Feather name="x" size={18} color="white" />
-                    </TouchableOpacity>
-                </View>
+              <View className="relative mb-4">
+                  {media.type === "image" && <Image source={{ uri: media.uri }} className="w-full h-48 rounded-xl" />}
+                  {media.type === "video" && (
+                      <View className="w-full h-48 rounded-xl bg-slate-100 justify-center items-center">
+                          <Feather name="video" size={40} color="#475569" />
+                          <Text className="font-semibold text-slate-700 mt-2">{t('videoSelected')}</Text>
+                      </View>
+                  )}
+                  <TouchableOpacity onPress={() => setMedia(null)} className="absolute top-2 right-2 bg-black/60 p-1.5 rounded-full">
+                      <Feather name="x" size={18} color="white" />
+                  </TouchableOpacity>
+              </View>
             ) : (
-                <TouchableOpacity
-                    onPress={() => Alert.alert("Add Media", "Choose an option", [
-                        { text: "Take Photo", onPress: () => pickImageWithCamera(setMedia) },
-                        { text: "Choose from Library", onPress: () => pickMediaFromLibrary(setMedia) },
-                        { text: "Cancel", style: "cancel" },
-                    ], { cancelable: true })}
-                    className="flex-col items-center justify-center bg-slate-100 p-10 rounded-2xl border-2 border-dashed border-slate-300 mb-4"
-                >
-                    <Feather name="upload-cloud" size={40} color="#64748b" />
-                    <Text className="text-base text-slate-600 mt-2 font-medium">Tap to add Photo or Video</Text>
-                </TouchableOpacity>
+              <TouchableOpacity
+                  onPress={() => Alert.alert(t('mediaPickerTitle'), t('mediaPickerMessage'), [
+                      { text: t('takePhoto'), onPress: () => pickImageWithCamera(setMedia) },
+                      { text: t('chooseFromLibrary'), onPress: () => pickMediaFromLibrary(setMedia) },
+                      { text: t('cancel'), style: "cancel" },
+                  ], { cancelable: true })}
+                  className="flex-col items-center justify-center bg-slate-100 p-10 rounded-2xl border-2 border-dashed border-slate-300 mb-4"
+              >
+                  <Feather name="upload-cloud" size={40} color="#64748b" />
+                  <Text className="text-base text-slate-600 mt-2 font-medium">{t('mediaPlaceholder')}</Text>
+              </TouchableOpacity>
             )}
 
-             {/* Date */}
-            <Text className="text-lg font-semibold text-slate-700 mb-2">Date of Observation</Text>
+            {/* Date */}
+            <Text className="text-lg font-semibold text-slate-700 mb-2">{t('dateLabel')}</Text>
             <TouchableOpacity
               onPress={() => setShowDatePicker(true)}
               className="flex-row items-center bg-slate-100 p-4 rounded-xl border border-slate-200"
@@ -337,7 +339,7 @@ export default function Report() {
             className={`w-full mt-2 py-4 rounded-xl shadow-md ${isSubmitting ? "bg-slate-400" : "bg-blue-600"}`}
           >
             <Text className="text-white text-center text-lg font-bold">
-              {isSubmitting ? "Submitting..." : "Submit Report"}
+              {isSubmitting ? t('submittingButton') : t('submitButton')}
             </Text>
           </TouchableOpacity>
         )}
@@ -350,18 +352,19 @@ export default function Report() {
       <View className="w-32 h-32 rounded-full border-4 border-green-400 flex items-center justify-center bg-white shadow-lg">
         <Feather name="check" size={64} color="#10b981" />
       </View>
-      <Text className="text-2xl font-bold text-slate-800 mt-8">Report Submitted!</Text>
+      <Text className="text-2xl font-bold text-slate-800 mt-8">{t('successTitle')}</Text>
       <Text className="text-base text-slate-600 mt-3 text-center px-6">
-        Thank you for contributing to coastal safety.
+        {t('successMessage')}
       </Text>
       <TouchableOpacity
         onPress={handleReportAnother}
         className="bg-blue-600 mt-10 py-4 px-8 rounded-xl shadow-md"
       >
-        <Text className="text-white text-lg font-bold">Report Another Hazard</Text>
+        <Text className="text-white text-lg font-bold">{t('reportAnotherButton')}</Text>
       </TouchableOpacity>
     </View>
   );
 
   return isSubmitted ? renderSuccess() : renderForm();
 }
+

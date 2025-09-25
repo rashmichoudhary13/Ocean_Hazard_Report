@@ -1,0 +1,57 @@
+{
+  "report": {
+    "pageTitle": "रिपोर्ट",
+    "headerTitle": "समुद्री खतरे की रिपोर्ट करें",
+    "headerSubtitle": "आपकी टिप्पणियाँ हमारे तटों को सुरक्षित रखने में मदद करती हैं।",
+    "step1Title": "खतरे की श्रेणी चुनें",
+    "naturalHazard": "प्राकृतिक खतरा",
+    "manMadeHazard": "मानव निर्मित खतरा",
+    "step2Title": "यह किस प्रकार का खतरा है?",
+    "hazards": {
+      "unusualTides": "असामान्य ज्वार",
+      "flooding": "बाढ़",
+      "coastalDamage": "तटीय क्षति",
+      "highWaves": "ऊँची लहरें",
+      "swellSurges": "सूजन वृद्धि",
+      "tsunami": "सुनामी",
+      "oilSpill": "तेल का रिसाव",
+      "pollutionDebris": "प्रदूषण/मलबा",
+      "abnormalSeaBehaviour": "असामान्य समुद्री व्यवहार",
+      "otherHazard": "अन्य खतरा"
+    },
+    "step3Title": "गंभीरता के स्तर का आकलन करें",
+    "severity": {
+      "low": "कम",
+      "lowDesc": "मामूली चिंता",
+      "medium": "मध्यम",
+      "mediumDesc": "मध्यम जोखिम",
+      "high": "उच्च",
+      "highDesc": "गंभीर खतरा"
+    },
+    "step4Title": "विवरण प्रदान करें",
+    "locationLabel": "स्थान",
+    "locationPlaceholder": "मेरा स्थान उपयोग करने के लिए टैप करें",
+    "descriptionLabel": "विवरण",
+    "descriptionPlaceholder": "आप जो देखते हैं उसका वर्णन करें...",
+    "mediaLabel": "मीडिया अपलोड करें",
+    "mediaPlaceholder": "फोटो या वीडियो जोड़ने के लिए टैप करें",
+    "dateLabel": "अवलोकन की तिथि",
+    "submitButton": "रिपोर्ट सबमिट करें",
+    "submittingButton": "सबमिट हो रहा है...",
+    "successTitle": "रिपोर्ट सबमिट की गई!",
+    "successMessage": "तटीय सुरक्षा में योगदान देने के लिए धन्यवाद।",
+    "reportAnotherButton": "एक और खतरा रिपोर्ट करें",
+    "validationErrorTitle": "सत्यापन त्रुटि",
+    "validationErrorMessage": "कृपया सबमिट करने से पहले सभी आवश्यक चरण पूरे करें।",
+    "authErrorTitle": "प्रमाणीकरण त्रुटि",
+    "authErrorMessage": "रिपोर्ट सबमिट करने के लिए आपको लॉग इन होना चाहिए।",
+    "submissionFailedTitle": "सबमिशन विफल",
+    "mediaPickerTitle": "मीडिया जोड़ें",
+    "mediaPickerMessage": "एक विकल्प चुनें",
+    "takePhoto": "फोटो लें",
+    "chooseFromLibrary": "लाइब्रेरी से चुनें",
+    "cancel": "रद्द करें",
+    "videoSelected": "वीडियो चुना गया"
+  }
+}
+

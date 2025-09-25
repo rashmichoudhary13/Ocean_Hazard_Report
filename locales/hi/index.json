@@ -1,0 +1,12 @@
+{
+  "title": "होम",
+  "totalReports": "कुल रिपोर्ट",
+  "userReports": "उपयोगकर्ता रिपोर्ट",
+  "socialMedia": "सोशल मीडिया",
+  "verifiedReports": "सत्यापित रिपोर्ट",
+  "recentHazardReports": "हाल की खतरनाक रिपोर्ट",
+  "more": "और देखें",
+  "noRecentReports": "कोई हालिया रिपोर्ट नहीं मिली।",
+  "communityLeaderboard": "सामुदायिक लीडरबोर्ड",
+  "loadingdashboard": "डैशबोर्ड लोड हो रहा है..."
+}

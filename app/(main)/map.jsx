@@ -51,7 +51,7 @@ export default function Map() {
           latitudeDelta: INITIAL_LATITUDE_DELTA,
           longitudeDelta: INITIAL_LATITUDE_DELTA,
         });
-        const API_URL = 'http://192.168.0.102:5000/reports';
+        const API_URL = 'http://192.168.0.100:5000/reports';
         const response = await fetch(API_URL);
         if (!response.ok) throw new Error('Failed to fetch reports.');
         const data = await response.json();

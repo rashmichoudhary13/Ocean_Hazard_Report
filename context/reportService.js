@@ -1,7 +1,7 @@
 // 👇 1. Accept 'token' as a second argument
 export const submitReport = async (formData, token) => { 
   try {
-    const response = await fetch("http://192.168.0.102:5000/reports", {
+    const response = await fetch("http://192.168.0.100:5000/reports", {
       method: "POST",
       headers: {
         // 👇 2. Use the token to create the Authorization header

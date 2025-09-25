@@ -1,17 +1,15 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from "react-i18next";
 import {
-  ActivityIndicator, // Kept for the horizontal list, but main layout is ScrollView
+  ActivityIndicator,
   Image,
   SafeAreaView,
-  ScrollView, // Changed to ScrollView for the overall page layout
+  ScrollView,
   Text,
-  TouchableOpacity, // Added for the "More" button
+  TouchableOpacity,
   View
 } from 'react-native';
 
-// --- Reusable UI Components ---
-
-// Card for the top statistics section
 const StatsCard = ({ title, value, icon, bgColor }) => (
   <View className={`w-[48%] ${bgColor} p-4 rounded-3xl shadow-lg mb-3 justify-between h-36`}>
     <View>
@@ -110,6 +108,7 @@ const LeaderboardItem = ({ user, rank }) => {
 
 // --- The Main Home Screen Component ---
 export default function Home() {
+  const { t } = useTranslation("index");
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -124,7 +123,7 @@ export default function Home() {
   useEffect(() => {
     const fetchReports = async () => {
       try {
-        const API_URL = 'http://192.168.0.102:5000/reports';
+        const API_URL = 'http://192.168.0.100:5000/reports';
         
         const response = await fetch(API_URL);
         if (!response.ok) {
@@ -149,7 +148,7 @@ export default function Home() {
     return (
       <SafeAreaView className="flex-1 justify-center items-center bg-cyan-50">
         <ActivityIndicator size="large" color="#0891b2" />
-        <Text className="mt-4 text-lg text-cyan-700">Loading Dashboard...</Text>
+        <Text className="mt-4 text-lg text-cyan-700">{t("loadingdashboard")}</Text>
       </SafeAreaView>
     );
   }
@@ -177,31 +176,31 @@ export default function Home() {
 
         {/* Section 1: Overall Statistics */}
         <View className="flex-row flex-wrap justify-between mb-6">
-            <StatsCard title="Total Reports" value={totalReports} bgColor="bg-purple-200" icon="🌐" />
-            <StatsCard title="User Reports" value={userReports} bgColor="bg-rose-200" icon="👤" />
-            <StatsCard title="Social Media" value={socialMediaReports} bgColor="bg-cyan-200" icon="💬" />
-            <StatsCard title="Verified Reports" value={verifiedReports} bgColor="bg-amber-200" icon="✅" />
+            <StatsCard title={t("totalReports")} value={totalReports} bgColor="bg-purple-200" icon="🌐" />
+            <StatsCard title={t("userReports")} value={userReports} bgColor="bg-rose-200" icon="👤" />
+            <StatsCard title={t("socialMedia")} value={socialMediaReports} bgColor="bg-cyan-200" icon="💬" />
+            <StatsCard title={t("verifiedReports")} value={verifiedReports} bgColor="bg-amber-200" icon="✅" />
         </View>
 
         {/* Section 2: Recent Hazard Reports */}
         <View className="mb-8">
             <View className="flex-row justify-between items-center mb-4">
-                <Text className="text-2xl font-bold text-cyan-900">Recent Hazard Reports</Text>
+                <Text className="text-2xl font-bold text-cyan-900">{t("recentHazardReports")}</Text>
                 <TouchableOpacity onPress={() => console.log('Navigate to All Reports')}>
-                    <Text className="text-cyan-600 font-semibold">More &gt;</Text>
+                    <Text className="text-cyan-600 font-semibold">{t("more")} &gt;</Text>
                 </TouchableOpacity>
             </View>
             {reports.slice(0, 3).map(item => (
                 <ReportCard item={item} key={item._id} />
             ))}
              {reports.length === 0 && (
-                <Text className="text-center text-gray-500 mt-4">No recent reports found.</Text>
+                <Text className="text-center text-gray-500 mt-4">{t("noRecentReports")}</Text>
             )}
         </View>
         
         {/* Section 3: Community Leaderboard */}
         <View>
-            <Text className="text-2xl font-bold text-cyan-900 mb-4">Community Leaderboard</Text>
+            <Text className="text-2xl font-bold text-cyan-900 mb-4">{t("communityLeaderboard")}</Text>
             {leaderboardData.map((user, index) => (
                 <LeaderboardItem user={user} rank={index + 1} key={user.id} />
             ))}

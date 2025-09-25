@@ -1,24 +1,42 @@
-// components/ProfileMenuItem.jsx
 import { Ionicons } from '@expo/vector-icons';
 import { Link } from 'expo-router';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 
-const ProfileMenuItem = ({ href, icon, name, isLogout = false }) => {
-  const textColor = isLogout ? 'text-red-500' : 'text-black';
-  const iconColor = isLogout ? 'red' : 'black'; // hex for yellow-400 and gray-300
+// This new version can handle BOTH navigation (href) and actions (onPress)
+const ProfileMenuItem = ({ href, icon, name, onPress, isLogout = false }) => {
+  const textColor = isLogout ? 'text-red-500' : 'text-gray-700';
+  const iconColor = isLogout ? '#ef4444' : '#0891b2';
 
-  // The Link component from expo-router handles the press and navigation.
+  // This is the content that will be displayed (icon, name, etc.)
+  const ItemContent = (
+    <View className="flex-row items-center justify-between p-4">
+      <View className="flex-row items-center">
+        <Ionicons name={icon} size={29} />
+        <Text className={`text-lg ml-6 ${textColor}`}>{name}</Text>
+      </View>
+      {!isLogout && <Ionicons name="chevron-forward-outline" size={24} color="#9ca3af" />}
+    </View>
+  );
+
+  // If an 'onPress' function is passed, wrap the content in a Pressable
+  // This is for actions like opening a modal or logging out.
+  if (onPress) {
+    return (
+      <Pressable onPress={onPress} style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}>
+        {ItemContent}
+      </Pressable>
+    );
+  }
+
+  // Otherwise, if no 'onPress' is given, wrap it in a Link for navigation.
   return (
     <Link href={href || '#'} asChild>
-      <TouchableOpacity className="flex-row items-center justify-between p-4">
-        <View className="flex-row items-center space-x-4">
-          <Ionicons name={icon} size={24} color={iconColor} />
-          <Text className={`text-lg ${textColor} pl-6`}>{name}</Text>
-        </View>
-        {!isLogout && <Ionicons name="chevron-forward" size={22} color="#9CA3AF" />}
-      </TouchableOpacity>
+      <Pressable style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}>
+        {ItemContent}
+      </Pressable>
     </Link>
   );
 };
 
 export default ProfileMenuItem;
+

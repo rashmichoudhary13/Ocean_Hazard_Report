@@ -1,0 +1,57 @@
+{
+  "report": {
+    "pageTitle": "Report",
+    "headerTitle": "Report an Ocean Hazard",
+    "headerSubtitle": "Your observations help keep our coasts safe.",
+    "step1Title": "Select Hazard Category",
+    "naturalHazard": "Natural Hazard",
+    "manMadeHazard": "Man-made Hazard",
+    "step2Title": "What type of hazard is it?",
+    "hazards": {
+      "unusualTides": "Unusual Tides",
+      "flooding": "Flooding",
+      "coastalDamage": "Coastal damage",
+      "highWaves": "High Waves",
+      "swellSurges": "Swell Surges",
+      "tsunami": "Tsunami",
+      "oilSpill": "Oil Spill",
+      "pollutionDebris": "Pollution/Debris",
+      "abnormalSeaBehaviour": "Abnormal Sea Behaviour",
+      "otherHazard": "Other Hazard"
+    },
+    "step3Title": "Assess the Severity Level",
+    "severity": {
+      "low": "Low",
+      "lowDesc": "Minor concern",
+      "medium": "Medium",
+      "mediumDesc": "Moderate risk",
+      "high": "High",
+      "highDesc": "Serious danger"
+    },
+    "step4Title": "Provide Details",
+    "locationLabel": "Location",
+    "locationPlaceholder": "Tap to use my location",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Describe what you see...",
+    "mediaLabel": "Upload Media",
+    "mediaPlaceholder": "Tap to add Photo or Video",
+    "dateLabel": "Date of Observation",
+    "submitButton": "Submit Report",
+    "submittingButton": "Submitting...",
+    "successTitle": "Report Submitted!",
+    "successMessage": "Thank you for contributing to coastal safety.",
+    "reportAnotherButton": "Report Another Hazard",
+    "validationErrorTitle": "Validation Error",
+    "validationErrorMessage": "Please complete all required steps before submitting.",
+    "authErrorTitle": "Authentication Error",
+    "authErrorMessage": "You must be logged in to submit a report.",
+    "submissionFailedTitle": "Submission Failed",
+    "mediaPickerTitle": "Add Media",
+    "mediaPickerMessage": "Choose an option",
+    "takePhoto": "Take Photo",
+    "chooseFromLibrary": "Choose from Library",
+    "cancel": "Cancel",
+    "videoSelected": "Video Selected"
+  }
+}
+

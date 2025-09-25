@@ -17,13 +17,12 @@ const firebaseConfig = {
 
 // Mine 
 // const firebaseConfig = {
-//   apiKey: "AIzaSyCWhDfoedXM7zlz-tgcIpqddt_UmAUbUHk",
-//   authDomain: "ocean-hazard-app.firebaseapp.com",
-//   projectId: "ocean-hazard-app",
-//   storageBucket: "ocean-hazard-app.firebasestorage.app",
-//   messagingSenderId: "530645472061",
-//   appId: "1:530645472061:web:95951bf9d9045e8999eb54",
-//   measurementId: "G-TY2RR42R2D"
+//   apiKey: "AIzaSyBCYa7T6auxJam9LuB7anBHYDIINueqU6s",
+//   authDomain: "image-c1b84.firebaseapp.com",
+//   projectId: "image-c1b84",
+//   storageBucket: "image-c1b84.firebasestorage.app",
+//   messagingSenderId: "433229564932",
+//   appId: "1:433229564932:web:50f5eaabe0fb224fc2b951"
 // };
 
 

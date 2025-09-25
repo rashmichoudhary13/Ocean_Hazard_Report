@@ -1,9 +1,11 @@
 // components/ProfileInfo.jsx
 import { useRouter } from 'expo-router';
+import { useTranslation } from "react-i18next";
 import { Image, Text, TouchableOpacity, View } from 'react-native';
 
 const ProfileInfo = ({ user }) => {
   const router = useRouter();
+  const { t } = useTranslation("profile");
 
   return (
     <>
@@ -21,7 +23,7 @@ const ProfileInfo = ({ user }) => {
           onPress={() => router.push('/edit-profile')} // Example navigation
           className="bg-cyan-500 w-2/3 py-3 rounded-full items-center justify-center"
         >
-          <Text className="text-white text-lg font-bold">Edit Profile</Text>
+          <Text className="text-white text-lg font-bold">{t("editProfile")}</Text>
         </TouchableOpacity>
       </View>
     </>

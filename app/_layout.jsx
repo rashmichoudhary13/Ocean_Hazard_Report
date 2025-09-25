@@ -1,7 +1,9 @@
+import './_language/i18n';
+import './globals.css';
 import { Redirect, Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { AuthProvider, useAuth } from "../context/AuthContext";
-import './globals.css';
+
 
 SplashScreen.preventAutoHideAsync();
 
