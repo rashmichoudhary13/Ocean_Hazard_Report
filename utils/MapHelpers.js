@@ -41,22 +41,17 @@ export const clusterReports = (reports, distanceThreshold) => {
     const percentage = (count / totalReports) * 100;
     
     let color;
-    let baseSize;
-    let fixedRadius; // The new accurate radius in meters
+    let fixedRadius; // The accurate radius in meters
 
-    // We now define both a scaling factor (baseSize) and a fixed radius
     if (percentage > 40) {
-      color = "#FF4500";
-      baseSize = 10000;
-      fixedRadius = 5000; // 5 km
+      color = "#FF4500"; // Critical (Orange-Red)
+      fixedRadius = 50000; // 50 km
     } else if (percentage >= 20) {
-      color = "#FFD166";
-      baseSize = 6000;
-      fixedRadius = 3000; // 3 km
+      color = "#FFD166"; // Moderate (Yellow)
+      fixedRadius = 30000; // 30 km
     } else {
-      color = "#FF66B3";
-      baseSize = 3000;
-      fixedRadius = 1500; // 1.5 km
+      color = "#4DB6AC"; // Low (Teal)
+      fixedRadius = 15000; // 15 km
     }
     
     const lats = cluster.points.map(p => p.location.coordinates[1]);
@@ -71,8 +66,7 @@ export const clusterReports = (reports, distanceThreshold) => {
       center,
       count,
       color,
-      baseSize,
-      fixedRadius, // Return both values
+      fixedRadius,
     };
   });
 };
