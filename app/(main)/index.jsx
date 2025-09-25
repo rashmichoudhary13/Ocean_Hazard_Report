@@ -132,13 +132,12 @@ export default function Home() {
   useEffect(() => {
     const fetchReports = async () => {
       try {
-<<<<<<< HEAD
+
         const API_URL = 'http://192.168.0.100:5000/reports';
         
 =======
         const API_URL = "http://192.168.0.101:5000/reports";
 
->>>>>>> 14e71d3aeca8b7ba1deae451c32b57c1c4b7ff74
         const response = await fetch(API_URL);
         if (!response.ok) {
           throw new Error("Failed to fetch data from the server.");
@@ -192,12 +191,10 @@ export default function Home() {
       <ScrollView contentContainerStyle={{ padding: 16 }}>
         {/* Section 1: Overall Statistics */}
         <View className="flex-row flex-wrap justify-between mb-6">
-<<<<<<< HEAD
             <StatsCard title={t("totalReports")} value={totalReports} bgColor="bg-purple-200" icon="🌐" />
             <StatsCard title={t("userReports")} value={userReports} bgColor="bg-rose-200" icon="👤" />
             <StatsCard title={t("socialMedia")} value={socialMediaReports} bgColor="bg-cyan-200" icon="💬" />
             <StatsCard title={t("verifiedReports")} value={verifiedReports} bgColor="bg-amber-200" icon="✅" />
-=======
           <StatsCard
             title="Total Reports"
             value={totalReports}
@@ -218,33 +215,10 @@ export default function Home() {
             value={verifiedReports}
             bgColor="bg-cyan-200"
           />
->>>>>>> 14e71d3aeca8b7ba1deae451c32b57c1c4b7ff74
         </View>
 
         {/* Section 2: Recent Hazard Reports */}
         <View className="mb-8">
-<<<<<<< HEAD
-            <View className="flex-row justify-between items-center mb-4">
-                <Text className="text-2xl font-bold text-cyan-900">{t("recentHazardReports")}</Text>
-                <TouchableOpacity onPress={() => console.log('Navigate to All Reports')}>
-                    <Text className="text-cyan-600 font-semibold">{t("more")} &gt;</Text>
-                </TouchableOpacity>
-            </View>
-            {reports.slice(0, 3).map(item => (
-                <ReportCard item={item} key={item._id} />
-            ))}
-             {reports.length === 0 && (
-                <Text className="text-center text-gray-500 mt-4">{t("noRecentReports")}</Text>
-            )}
-        </View>
-        
-        {/* Section 3: Community Leaderboard */}
-        <View>
-            <Text className="text-2xl font-bold text-cyan-900 mb-4">{t("communityLeaderboard")}</Text>
-            {leaderboardData.map((user, index) => (
-                <LeaderboardItem user={user} rank={index + 1} key={user.id} />
-            ))}
-=======
           <View className="flex-row justify-between items-center mb-4">
             <Text className="text-2xl font-bold text-cyan-900">
               Recent Hazard Reports
@@ -263,7 +237,6 @@ export default function Home() {
               No recent reports found.
             </Text>
           )}
->>>>>>> 14e71d3aeca8b7ba1deae451c32b57c1c4b7ff74
         </View>
 
         {/* Section 3: Community Leaderboard */}

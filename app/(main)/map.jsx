@@ -1,8 +1,8 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as Location from "expo-location";
-import { useEffect, useMemo, useState, useRef } from "react";
-import { ActivityIndicator, SafeAreaView, StyleSheet, Text, View, TouchableOpacity, Animated } from "react-native";
-import MapView, { Marker, Callout, Heatmap, Circle, PROVIDER_DEFAULT, UrlTile } from "react-native-maps";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { ActivityIndicator, Animated, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import MapView, { Callout, Circle, Heatmap, Marker, PROVIDER_DEFAULT, UrlTile } from "react-native-maps";
 import { clusterReports } from "../../utils/MapHelpers";
 
 // --- Configuration ---
@@ -98,7 +98,7 @@ export default function MapScreen() {
     const initializeLocation = async () => {
       try {
         let { status } = await Location.requestForegroundPermissionsAsync();
-<<<<<<< HEAD
+
         if (status !== "granted") {
           alert("Permission to access location was denied");
           setLoading(false);
@@ -117,9 +117,9 @@ export default function MapScreen() {
         if (!response.ok) throw new Error('Failed to fetch reports.');
         const data = await response.json();
         setAllReports(data.reports);
-=======
+
         if (status !== 'granted') throw new Error('Location permission denied');
-        
+        if (status !== 'granted') throw new Error('Location permission denied');
         // Default to India view if location is not found quickly
         const initialRegion = {
           latitude: 20.5937,
@@ -129,7 +129,6 @@ export default function MapScreen() {
         };
         setRegion(initialRegion);
 
->>>>>>> 14e71d3aeca8b7ba1deae451c32b57c1c4b7ff74
       } catch (error) {
         console.error("Location initialization error:", error);
         alert(error.message);
