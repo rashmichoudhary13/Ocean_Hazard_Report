@@ -198,7 +198,7 @@ export default function Home() {
           />
           <StatsCard
             title={t("userReports")}
-            value={userReports}
+            value={totalReports}
             bgColor="bg-cyan-200"
           />
           <StatsCard

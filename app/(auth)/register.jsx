@@ -13,8 +13,8 @@ const Register = () => {
   const [name, setName] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  
-  // Get the register function from our context
+
+  // This should call Firebase's createUserWithEmailAndPassword from your context
   const { register } = useAuth();
 
   const handleSignUp = async () => {
@@ -26,35 +26,39 @@ const Register = () => {
     setLoading(true);
 
     try {
+      // Step 1: Create user in Firebase Auth
       const userCredential = await register(email, password);
       const user = userCredential.user;
-      await updateProfile(user, {
-        displayName: name,
-      });
-      
-      const token = await user.getIdToken();
-      console.log("role is: ", role);
-      const response = await fetch('http://192.168.0.100:5000/auth/login', {
-        method: 'POST',
+      await updateProfile(user, { displayName: name });
+      const idToken = await user.getIdToken();
+
+      // Step 2: Call the single backend endpoint to create the DB profile
+      const response = await fetch("http://192.168.0.100:5000/auth/upsert", {
+        method: "POST",
         headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${idToken}`, // Send token in header
         },
-        body: JSON.stringify({ name: name, role: role }),
+        body: JSON.stringify({
+          name: name, // Send name and role for new profile creation
+          role: role,
+        }),
       });
+
       if (!response.ok) {
-        throw new Error('Failed to create user profile on our server.');
+        throw new Error("Failed to create profile on server.");
       }
 
-      Alert.alert('Success!', 'Your account has been created.');
+      Alert.alert("Success!", "Your account has been created.");
+      router.replace("/(main)");
     } catch (err) {
-      if (err.code === 'auth/email-already-in-use') {
-        setError('That email address is already registered.');
-      } else if (err.code === 'auth/weak-password') {
-        setError('Password should be at least 6 characters.');
+      if (err?.code === "auth/email-already-in-use") {
+        setError("That email address is already registered.");
+      } else if (err?.code === "auth/weak-password") {
+        setError("Password should be at least 6 characters.");
       } else {
-        setError('An error occurred. Please try again.');
-        console.error(err);
+        setError(err?.message || "An error occurred. Please try again.");
+        console.error("Registration Error:", err);
       }
     } finally {
       setLoading(false);
@@ -63,61 +67,67 @@ const Register = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-white justify-center px-6">
-      <Text className="text-center text-3xl font-black text-cyan-500 mb-4">
+      <Text className="text-center text-3xl font-black text-cyan-600 mb-4">
         Create Account
       </Text>
-      <Text className="text-center font-bold text-2xl text-gray-700 mb-8 mx-auto">
-        Create an account to report and track hazards.
+      <Text className="text-center font-bold text-xl text-gray-600 mb-8">
+        Join our community to help keep coasts safe.
       </Text>
-      <TextInput
-        mode="outlined"
-        label="Name"
-        value={name}
-        onChangeText={setName}
-        outlineColor="#06b6d4"
-        activeOutlineColor="#06b6d4"
-      />
-      <TextInput
-        mode="outlined"
-        label="Email"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        autoCapitalize="none"
-        outlineColor="#06b6d4"
-        activeOutlineColor="#06b6d4"
-        style={{ marginTop: 16 }}
-      />
-      <TextInput
-        mode="outlined"
-        label="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-        outlineColor="#06b6d4"
-        activeOutlineColor="#06b6d4"
-        style={{ marginTop: 16, marginBottom: 8 }}
-      />
-      {error ? <Text className="text-red-500 text-center mb-4">{error}</Text> : null}
+
+      <View className="space-y-4">
+        <TextInput
+          mode="outlined"
+          label="Name"
+          value={name}
+          onChangeText={setName}
+          outlineColor="#06b6d4"
+          activeOutlineColor="#0891b2"
+        />
+        <TextInput
+          mode="outlined"
+          label="Email"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
+          outlineColor="#06b6d4"
+          activeOutlineColor="#0891b2"
+        />
+        <TextInput
+          mode="outlined"
+          label="Password"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+          outlineColor="#06b6d4"
+          activeOutlineColor="#0891b2"
+        />
+      </View>
+
+      {error ? (
+        <Text className="text-red-500 text-center mt-4">{error}</Text>
+      ) : null}
+
       <Button
         mode="contained"
         buttonColor="#06b6d4"
         onPress={handleSignUp}
         loading={loading}
         disabled={loading}
-        style={{ paddingVertical: 3 }}
-        labelStyle={{ fontSize: 15, fontWeight: "bold" }}
+        className="mt-6 py-1"
+        labelStyle={{ fontSize: 16, fontWeight: "bold" }}
       >
         Sign up
       </Button>
-      <View className="mt-5">
+
+      <View className="mt-4">
         <Button
           mode="text"
-          textColor="#06b6d4"
-          labelStyle={{ fontSize: 18, fontWeight: "bold" }}
+          textColor="#0891b2"
+          labelStyle={{ fontSize: 16, fontWeight: 'bold' }}
           onPress={() => router.push("/login")}
         >
-          Already have an account
+          Already have an account?
         </Button>
       </View>
     </SafeAreaView>
