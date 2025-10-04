@@ -20,15 +20,21 @@ https://ocean-hazard-backend-sa60.onrender.com/api-docs/
 
 - ## Home Page
 - ## Profile Page
-  ![WhatsApp Image 2025-10-04 at 22 25 52_07310a14](https://github.com/user-attachments/assets/728bd6e7-3bb6-4b76-8a2e-f59fa83e1aa0)
+  <img src="https://github.com/user-attachments/assets/728bd6e7-3bb6-4b76-8a2e-f59fa83e1aa0" alt="Create Account" width="250"/>
 
 - ## Report Page
-  ![WhatsApp Image 2025-10-04 at 22 25 17_76b84790](https://github.com/user-attachments/assets/a0a31274-0317-4656-80c9-dde498c8788c)
-  ![WhatsApp Image 2025-10-04 at 22 25 18_9364738d](https://github.com/user-attachments/assets/5947475b-e23b-49ce-a9f2-d59b724554aa)
+  <p align="center">
+    <img src="https://github.com/user-attachments/assets/a0a31274-0317-4656-80c9-dde498c8788c" alt="Role Selection" width="250"/>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <img src="https://github.com/user-attachments/assets/5947475b-e23b-49ce-a9f2-d59b724554aa" alt="Login Page" width="250"/>
+  </p>
 
 - ## Multilingual Support
-  ![WhatsApp Image 2025-10-04 at 22 25 53_6c951028](https://github.com/user-attachments/assets/8ba03f6d-1b14-4e3e-9e15-a3f59950f9f5)
-  ![WhatsApp Image 2025-10-04 at 22 25 53_14dd5fad](https://github.com/user-attachments/assets/84b7466d-c154-4127-adb5-02762a5336d3)
+  <p align="center">
+    <img src="https://github.com/user-attachments/assets/8ba03f6d-1b14-4e3e-9e15-a3f59950f9f5" alt="Role Selection" width="250"/>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <img src="https://github.com/user-attachments/assets/84b7466d-c154-4127-adb5-02762a5336d3" alt="Login Page" width="250"/>
+  </p>
 
 
 
