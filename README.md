@@ -10,7 +10,7 @@ https://ocean-hazard-backend-sa60.onrender.com/api-docs/
 
 ## Screenshot
 - ## Role Selection Page
-- <table border="0">
+- <table style="border: none;">
   <tr>
     <td align="center">
       <img src="https://github.com/user-attachments/assets/915989ca-0fb5-4b86-937c-1b9142e42e2e" alt="Role Selection" width="250">
