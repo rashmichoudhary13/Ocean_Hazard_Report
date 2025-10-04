@@ -23,14 +23,14 @@ https://ocean-hazard-backend-sa60.onrender.com/api-docs/
   <img src="https://github.com/user-attachments/assets/728bd6e7-3bb6-4b76-8a2e-f59fa83e1aa0" alt="Create Account" width="250"/>
 
 - ## Report Page
-  <p align="center">
+  <p>
     <img src="https://github.com/user-attachments/assets/a0a31274-0317-4656-80c9-dde498c8788c" alt="Role Selection" width="250"/>
     &nbsp;&nbsp;&nbsp;&nbsp;
     <img src="https://github.com/user-attachments/assets/5947475b-e23b-49ce-a9f2-d59b724554aa" alt="Login Page" width="250"/>
   </p>
 
 - ## Multilingual Support
-  <p align="center">
+  <p>
     <img src="https://github.com/user-attachments/assets/8ba03f6d-1b14-4e3e-9e15-a3f59950f9f5" alt="Role Selection" width="250"/>
     &nbsp;&nbsp;&nbsp;&nbsp;
     <img src="https://github.com/user-attachments/assets/84b7466d-c154-4127-adb5-02762a5336d3" alt="Login Page" width="250"/>
