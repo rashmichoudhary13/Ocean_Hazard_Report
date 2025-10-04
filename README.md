@@ -4,8 +4,8 @@ https://ocean-hazard-backend-sa60.onrender.com/api-docs/
 # ⚙️ TechStack
 **Frontend:** React-Native + Expo, Nativewind <br>
 **Backend:** Node.js, Express.js <br>
-**Database:** Atlas Mongodb
-**Auth:** Firebase Auth
+**Database:** Atlas Mongodb <br>
+**Auth:** Firebase Auth <br>
 **Multilingual:** i18next Library
 
 ## Get started
