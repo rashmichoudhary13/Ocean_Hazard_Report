@@ -10,7 +10,7 @@ https://ocean-hazard-backend-sa60.onrender.com/api-docs/
 
 ## Screenshot
 - ## Role Selection Page
-- <table style="border: none;">
+- <table border="0">
   <tr>
     <td align="center">
       <img src="https://github.com/user-attachments/assets/915989ca-0fb5-4b86-937c-1b9142e42e2e" alt="Role Selection" width="250">
@@ -23,6 +23,14 @@ https://ocean-hazard-backend-sa60.onrender.com/api-docs/
     </td>
   </tr>
 </table>
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/915989ca-0fb5-4b86-937c-1b9142e42e2e" alt="Role Selection" width="250"/>
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="https://github.com/user-attachments/assets/ef1e068f-165b-4ed0-b481-707ce850fc9f" alt="Login Page" width="250"/>
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="path/to/your/third_image.jpg" alt="Create Account" width="250"/>
+</p>
 
 - ## Home Page
 - ## Profile Page
