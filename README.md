@@ -10,7 +10,7 @@ https://ocean-hazard-backend-sa60.onrender.com/api-docs/
 
 ## Screenshot
 - ## Role Selection Page
-  <img width="250" height="250" alt="image" src="https://github.com/user-attachments/assets/915989ca-0fb5-4b86-937c-1b9142e42e2e" />
+  <img width="250" height="350" alt="image" src="https://github.com/user-attachments/assets/915989ca-0fb5-4b86-937c-1b9142e42e2e" />
 
 - ## Login Page
   ![WhatsApp Image 2025-10-04 at 22 25 17_3f40ecd2](https://github.com/user-attachments/assets/ef1e068f-165b-4ed0-b481-707ce850fc9f)
