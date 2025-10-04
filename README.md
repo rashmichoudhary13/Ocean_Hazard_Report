@@ -10,6 +10,19 @@ https://ocean-hazard-backend-sa60.onrender.com/api-docs/
 
 ## Screenshot
 - ## Role Selection Page
+- <table>
+  <tr>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/915989ca-0fb5-4b86-937c-1b9142e42e2e" alt="Role Selection" width="250">
+    </td>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/ef1e068f-165b-4ed0-b481-707ce850fc9f" alt="Login Page" width="250">
+    </td>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/efe4cbbe-642b-47b6-91e4-05827c7116fc" alt="Create Account" width="250">
+    </td>
+  </tr>
+</table>
   <img width="250" height="500" alt="image" src="https://github.com/user-attachments/assets/915989ca-0fb5-4b86-937c-1b9142e42e2e" /> 
   <img width="250" height="500" alt="image" src="https://github.com/user-attachments/assets/ef1e068f-165b-4ed0-b481-707ce850fc9f" />
   <img width="250" height="500" alt="image" src="https://github.com/user-attachments/assets/efe4cbbe-642b-47b6-91e4-05827c7116fc" />
